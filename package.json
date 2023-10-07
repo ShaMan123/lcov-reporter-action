@@ -22,7 +22,6 @@
 	"scripts": {
 		"build": "rollup -c",
 		"test": "jest --coverage",
-		"coverage:report": "nyc report --reporter=lcov --reporter=text",
 		"local": "babel-node src/cli",
 		"format": "prettier --write src/*.js src/**/*.js"
 	},
@@ -42,7 +41,6 @@
 		"babel-jest": "^29.7.0",
 		"core-js": "^3.33.0",
 		"jest": "^29.7.0",
-		"nyc": "^15.1.0",
 		"prettier": "^2.8.8",
 		"regenerator-runtime": "^0.13.11",
 		"rollup": "^2.79.1",

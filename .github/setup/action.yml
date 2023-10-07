@@ -1,18 +1,12 @@
-name: 'Install fabric'
-description: 'Install dependencies from cache between different node versions'
+name: Setup node & install deps
+description: Install dependencies from cache between different node versions
 inputs:
   node-version:
     required: true
-    description: 'the node version'
-  install-system-deps:
-    description: 'install node-canvas deps with apt-get'
+    description: node version
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
-    - name: Install system deps for node canvas
-      if: inputs.install-system-deps == 'true'
-      run: sudo apt-get install libgif-dev libpng-dev libpango1.0-dev libjpeg8-dev librsvg2-dev libcairo2-dev
-      shell: bash
     - name: Use Node.js v${{ inputs.node-version }}
       uses: actions/setup-node@v3
       with:

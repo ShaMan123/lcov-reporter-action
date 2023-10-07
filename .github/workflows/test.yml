@@ -11,19 +11,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        uses: ./.github/actions/cached-install.yml
+        uses: ./.github/setup
         with:
           node-version: 18.x
           install-system-deps: false
       - name: Run Jest tests
         run: npm test
+      - name: List coverage files
+        run: ls -l coverage
       - name: Upload test coverage
         uses: actions/upload-artifact@v3
         with:
-          name: coverage-jest
-          path: .nyc_output/*.json
-      - run: ls -l .nyc_output
-      - run: npm run coverage:report
+          name: coverage
+          path: coverage
       - uses: ./action.yml
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
