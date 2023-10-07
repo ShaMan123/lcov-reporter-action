@@ -24,7 +24,10 @@ jobs:
         with:
           name: coverage
           path: coverage
-      - uses: ./
+      - name: build
+        run: npm run build
+      - name: Run action
+        uses: ./
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           delete-old-comments: true
