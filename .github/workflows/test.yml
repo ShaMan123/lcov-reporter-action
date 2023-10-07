@@ -24,7 +24,7 @@ jobs:
         with:
           name: coverage
           path: coverage
-      - name: build
+      - name: Build
         run: npm run build
       - name: Run action
         uses: ./
