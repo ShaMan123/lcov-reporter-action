@@ -34,12 +34,13 @@ jobs:
           echo "target_commitish=$tag" >> $GITHUB_OUTPUT
         shell: bash
       - name: Create Release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v6
         with:
-          tag_name: ${{ steps.build.outputs.tag }}
-          target_commitish: ${{ steps.build.outputs.target_commitish }}
-          generate_release_notes: true
-          draft: false
-          prerelease: false
+          result-encoding: string
+          script: |
+            return github.rest.repos.createRelease({
+              ...context.repo,
+              tag_name: "${{ steps.build.outputs.tag }}",
+              target_commitish: "${{ steps.build.outputs.target_commitish }}",
+              generate_release_notes: true,
+            });
