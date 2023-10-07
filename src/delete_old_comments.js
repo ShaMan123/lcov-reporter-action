@@ -3,7 +3,7 @@ import * as core from "@actions/core"
 const REQUESTED_COMMENTS_PER_PAGE = 20
 
 export async function deleteOldComments(github, options, context, keepLast) {
-	console.log({ keepLast })
+	console.log({ keepLast }, "d?")
 	const existingComments = await getExistingComments(github, options, context)
 	const commentToUpdate = keepLast ? existingComments.shift() : null
 	for (const comment of existingComments) {
