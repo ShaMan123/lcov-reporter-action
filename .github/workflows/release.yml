@@ -21,14 +21,6 @@ jobs:
         id: build
         run: |
           tag=$(echo ${{ github.ref }} | sed "s/refs\/tags\/v//")
-          npm run build
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-          echo "node_modules/" > .gitignore
-          git add .gitignore
-          git add dist/main.js -f
-          git commit -m "build"
-          git push --set-upstream origin $tag
           echo "tag=v$tag" >> $GITHUB_OUTPUT
           echo "target_commitish=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
         shell: bash
