@@ -9,23 +9,27 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
       - name: Install dependencies
         uses: ./.github/setup
         with:
           node-version: 18.x
-          install-system-deps: false
       - name: Build
         run: npm run build
+      - name: Target commitish
+        id: target_commitish
+        run: |
+          echo "value=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        shell: bash
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          target_commitish: ${{ steps.target_commitish.outputs.value }}
+          generate_release_notes: true
           draft: false
           prerelease: false
