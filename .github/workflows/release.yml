@@ -21,7 +21,6 @@ jobs:
         id: build
         run: |
           tag=$(echo ${{ github.ref }} | sed "s/refs\/tags\/v//")
-          git checkout -b  $tag
           npm run build
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
