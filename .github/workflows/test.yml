@@ -1,0 +1,31 @@
+name: "🧪"
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: ./.github/actions/cached-install.yml
+        with:
+          node-version: 18.x
+          install-system-deps: false
+      - name: Run Jest tests
+        run: npm test
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-jest
+          path: .nyc_output/*.json
+      - run: ls -l .nyc_output
+      - run: npm run coverage:report
+      - uses: ./action.yml
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          delete-old-comments: true
+          update-comment: true
