@@ -24,7 +24,7 @@ jobs:
         with:
           name: coverage
           path: coverage
-      - uses: ./action.yml
+      - uses: ./
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           delete-old-comments: true
