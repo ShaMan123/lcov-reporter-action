@@ -21,6 +21,8 @@ jobs:
         id: build
         run: |
           tag=$(echo ${{ github.ref }} | sed "s/refs\/tags\/v//")
+          echo "tag=v$tag" >> $GITHUB_OUTPUT
+          echo "target_commitish=$tag" >> $GITHUB_OUTPUT
           git checkout -b  $tag
           npm run build
           git config user.name github-actions[bot]
@@ -28,18 +30,24 @@ jobs:
           echo "node_modules/" > .gitignore
           git add .gitignore
           git add dist/main.js -f
+          rm src
           git commit -m "build"
           git push --set-upstream origin $tag
-          echo "tag=v$tag" >> $GITHUB_OUTPUT
-          echo "target_commitish=$tag" >> $GITHUB_OUTPUT
         shell: bash
       - name: Create Release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v6
         with:
-          tag_name: ${{ steps.build.outputs.tag }}
-          target_commitish: ${{ steps.build.outputs.target_commitish }}
-          generate_release_notes: true
-          draft: false
-          prerelease: false
+          result-encoding: string
+          script: |
+            return github.rest.repos.createRelease({
+              ...context.repo,
+              tag_name: "${{ steps.build.outputs.tag }}",
+              target_commitish: "${{ steps.build.outputs.target_commitish }}",
+              generate_release_notes: true,
+            }).then(({ html_url: url }) => {
+              console.log(url);
+              return url;
+            });
+      - name: Delete branch ${{ steps.build.outputs.tag }}
+        run: |
+          git push origin --delete ${{ steps.build.outputs.tag }}
