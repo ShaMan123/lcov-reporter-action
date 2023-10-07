@@ -22,7 +22,7 @@ jobs:
         run: |
           tag=$(echo ${{ github.ref }} | sed "s/refs\/tags\/v//")
           echo "tag=v$tag" >> $GITHUB_OUTPUT
-          echo "target_commitish=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          echo "target_commitish=$tag" >> $GITHUB_OUTPUT
         shell: bash
       - name: Create Release
         uses: softprops/action-gh-release@v1
